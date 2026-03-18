@@ -35,6 +35,11 @@ python3 brute_force.py
   [FOUND] Username: admin Password: password
   [MISS]  Username: admin Password: 123456
 
+### CI/CD Security Pipeline
+Automated Semgrep SAST scan triggered on every push to GitHub.
+Scans all code for security vulnerabilities automatically.
+Built with GitHub Actions — runs on every push to master branch.
+
 ## Background
 - 14 years QA Automation Engineering
 - CISSP certified
