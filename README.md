@@ -40,6 +40,13 @@ Automated Semgrep SAST scan triggered on every push to GitHub.
 Scans all code for security vulnerabilities automatically.
 Built with GitHub Actions — runs on every push to master branch.
 
+### dvwa_security_report.md
+Professional security assessment report from OWASP ZAP 
+DAST scan against DVWA.
+- 4 Medium findings
+- 5 Low findings
+- Full remediation recommendations
+
 ## Background
 - 14 years QA Automation Engineering
 - CISSP certified
