@@ -44,8 +44,19 @@ Built with GitHub Actions — runs on every push to master branch.
 Professional security assessment report from OWASP ZAP 
 DAST scan against DVWA.
 - 4 Medium findings
+- Content Security Policy (CSP) Header Not Set
+- Directory Browsing enabled
+- HTTP Only Site — no HTTPS
+- Missing Anti-Clickjacking Header
 - 5 Low findings
+- Cookie No HttpOnly Flag
+- Cookie without SameSite Attribute
+- In Page Banner Information Leak
+- Server Leaks Version Information
+- X-Content-Type-Options Header Missing
 - Full remediation recommendations
+
+
 
 ## Background
 - 14 years QA Automation Engineering
