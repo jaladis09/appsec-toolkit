@@ -56,6 +56,24 @@ DAST scan against DVWA.
 - X-Content-Type-Options Header Missing
 - Full remediation recommendations
 
+#  Burp Suite web application testing
+
+### Tools used
+- Burp Suite Community Edition
+- DVWA (Damn Vulnerable Web Application)
+
+### What I practiced
+- Setting up Burp Suite proxy using built-in browser
+- Intercepting HTTP requests mid-flight
+- Parameter tampering — modifying GET request credentials
+- Using HTTP History to review all intercepted traffic
+- Using Repeater to test multiple request variations
+
+### Key findings
+- DVWA Brute Force page sends credentials via GET request
+- Username and password visible in plain text in URL
+- No server-side validation — parameters can be modified mid-flight
+- Credentials leak in browser history, server logs, and proxy logs
 
 
 ## Background
