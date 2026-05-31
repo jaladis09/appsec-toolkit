@@ -24,7 +24,7 @@ def send_to_splunk(username, password, status, http_code):
             SPLUNK_URL,
             headers={"Authorization": f"Splunk {SPLUNK_TOKEN}"},
             json=event,
-            verify=False  # self-signed cert in local Splunk
+            verify=False  # nosemgrep: python.requests.security.disabled-cert-validation
         )
     except Exception as e:
         print(f"[SPLUNK ERROR] {e}")
