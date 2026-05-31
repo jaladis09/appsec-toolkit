@@ -1,0 +1,9 @@
+# Semgrep ignore file
+# verify=False is an accepted risk in this lab environment
+# Splunk uses a self-signed certificate on localhost
+# This would be remediated in a production environment
+
+# Ignore cert validation findings in Splunk HEC scripts
+brute_force.py
+crapi_brute_force.py
+zap_to_splunk.py
