@@ -1,12 +1,60 @@
 # AppSec Toolkit
 
-Security tools built during my transition from
-QA Automation Engineer to Application Security Engineer.
+> QA Automation Engineer (14 years) → Application Security Engineer
+> CISSP | CC (Certified in Cybersecurity)
 
-## Tools
+A hands-on security engineering portfolio built over 90 days.
+Every tool, report, and pipeline here was built from scratch —
+not tutorials, not copy-paste. Real tools, real targets, real findings.
+
+---
+
+## What I built
+
+| Asset | Type | Description |
+|-------|------|-------------|
+| `header_scanner.py` | Passive recon tool | Checks 6 HTTP security headers |
+| `brute_force.py` | Attack simulation | Automated credential testing vs DVWA |
+| `crapi_brute_force.py` | API attack simulation | Broken auth testing vs crAPI |
+| `zap_to_splunk.py` | SIEM integration | Ships ZAP findings into Splunk |
+| `security.yml` | CI/CD pipeline | Semgrep SAST on every push |
+| `dvwa_security_report.md` | DAST report | 4 Medium, 5 Low findings from ZAP |
+| `crapi_security_report.md` | API security report | BOLA, BFLA, Broken Auth findings |
+| `dvwa-login-threat-model.json` | Threat model | STRIDE — 6 threats on DVWA login flow |
+
+---
+
+## SIEM Pipeline — Splunk Integration
+
+Built a full security operations pipeline from scratch:
+
+```
+Attack tools run against targets
+        ↓
+Logs ship to Splunk via HTTP Event Collector (HEC)
+        ↓
+SPL queries correlate events across all tools
+        ↓
+Threshold alert fires on brute force detection
+        ↓
+Unified dashboard — full attack surface in one view
+```
+
+**Detection rule built:**
+Brute force alert triggers when more than 5 failed logins
+occur within a 60 second window — High severity.
+
+**Data sources feeding Splunk:**
+- `appsec_brute_force` — DVWA web login attacks
+- `appsec_api_brute_force` — crAPI API attacks
+- `appsec_zap_findings` — OWASP ZAP DAST findings
+
+---
+
+## Tools & Findings
 
 ### header_scanner.py
-Checks a target URL for missing HTTP security headers.
+Passive recon tool that checks a target URL for missing HTTP security headers.
 
 Tests for:
 - Strict-Transport-Security (HSTS)
@@ -16,105 +64,153 @@ Tests for:
 - Referrer-Policy
 - Permissions-Policy
 
-**Usage:**
+```bash
 python3 header_scanner.py https://example.com
 
-**Example output:**
-  [PASS]  Strict-Transport-Security
-  [MISS]  Content-Security-Policy — Controls resource loading
+[PASS]  Strict-Transport-Security
+[MISS]  Content-Security-Policy — Controls resource loading
+```
+
+---
 
 ### brute_force.py
-Automated login brute force script for testing weak credentials.
-Tests multiple username and password combinations against a target login page.
-Built and tested against DVWA (Damn Vulnerable Web Application).
+Automated credential brute force script with real-time Splunk logging.
+Built and tested against DVWA at security level Low.
 
-**Usage:**
+```bash
 python3 brute_force.py
 
-**Example output:**
-  [FOUND] Username: admin Password: password
-  [MISS]  Username: admin Password: 123456
+[FOUND] Username: admin Password: password
+[MISS]  Username: admin Password: 123456
+```
+
+Every attempt ships to Splunk as a structured JSON event in real time.
+
+---
+
+### crapi_brute_force.py
+API authentication brute force script targeting crAPI's identity service.
+Confirms absence of rate limiting — a real-world OWASP API Security Top 10 finding.
+
+```bash
+python3 crapi_brute_force.py
+
+[FOUND] Password: Test@1234 — Status: 200
+[MISS]  Password: wrongpassword — Status: 401
+```
+
+**Finding:** crAPI allows unlimited authentication attempts with no lockout
+or rate limiting — confirming Broken Authentication (OWASP API3).
+
+---
+
+### DVWA Security Assessment — ZAP DAST
+Full DAST scan using OWASP ZAP against DVWA.
+
+| # | Finding | Risk |
+|---|---------|------|
+| 1 | CSP Header Not Set | Medium |
+| 2 | Directory Browsing | Medium |
+| 3 | HTTP Only Site | Medium |
+| 4 | Missing Anti-Clickjacking Header | Medium |
+| 5 | Cookie No HttpOnly Flag | Low |
+| 6 | Cookie without SameSite Attribute | Low |
+| 7 | In Page Banner Information Leak | Low |
+| 8 | Server Leaks Version Information | Low |
+| 9 | X-Content-Type-Options Missing | Low |
+
+Full report with remediation recommendations: `dvwa_security_report.md`
+
+---
+
+### crAPI Security Assessment
+Manual API security testing against crAPI (Completely Ridiculous API).
+
+| Finding | OWASP API Category |
+|---------|--------------------|
+| BOLA — Access other users' vehicle data | API1 — Broken Object Level Auth |
+| BFLA — Access admin functions as user | API5 — Broken Function Level Auth |
+| Broken Auth — No rate limiting on login | API2 — Broken Authentication |
+
+Full report: `crapi_security_report.md`
+
+---
+
+### Threat Model — STRIDE
+STRIDE threat model on DVWA login flow. 6 threats identified across:
+- Spoofing — credential brute force
+- Tampering — parameter manipulation via Burp Suite
+- Repudiation — no audit logging
+- Information Disclosure — credentials in GET parameters
+- Denial of Service — no account lockout
+- Elevation of Privilege — SQL injection to bypass auth
+
+---
+
+### OWASP Top 10 — Hands-on Practice
+
+All practiced on DVWA:
+
+**SQL Injection (A03)**
+Input `%' or '0'='0` returned all 5 user records.
+Fix: Parameterised queries.
+
+**XSS Reflected (A03)**
+Injected `<script>alert('XSS')</script>` — executed in browser.
+Fix: Output encoding via `html.escape()`.
+
+**XSS Stored (A03)**
+Script injected into guestbook — executes for every visitor permanently.
+Fix: Sanitise input and encode output before storing.
+
+**Command Injection (A03)**
+Input `127.0.0.1; whoami` — server returned `www-data`.
+Fix: Never concatenate user input into system commands.
+
+**Key principle:** All four vulnerabilities share the same root cause —
+untrusted user input passed directly into an interpreter.
+Frontend validation provides zero security — bypassed in seconds with Burp Suite.
+
+---
+
+### Burp Suite Practice
+- Intercepting HTTP requests mid-flight
+- Parameter tampering on DVWA brute force page
+- Credentials visible in plain text in GET parameters
+- Repeater for testing multiple request variations
+
+**Finding:** DVWA sends credentials via GET request —
+username and password leak into browser history, server logs, and proxy logs.
+
+---
 
 ### CI/CD Security Pipeline
-Automated Semgrep SAST scan triggered on every push to GitHub.
-Scans all code for security vulnerabilities automatically.
-Built with GitHub Actions — runs on every push to master branch.
+Semgrep SAST runs automatically on every push to master via GitHub Actions.
+Pipeline defined in `.github/workflows/security.yml`.
 
-### dvwa_security_report.md
-Professional security assessment report from OWASP ZAP 
-DAST scan against DVWA.
-- 4 Medium findings
-- Content Security Policy (CSP) Header Not Set
-- Directory Browsing enabled
-- HTTP Only Site — no HTTPS
-- Missing Anti-Clickjacking Header
-- 5 Low findings
-- Cookie No HttpOnly Flag
-- Cookie without SameSite Attribute
-- In Page Banner Information Leak
-- Server Leaks Version Information
-- X-Content-Type-Options Header Missing
-- Full remediation recommendations
+---
 
-#  Burp Suite web application testing
+## Stack
 
-### Tools used
-- Burp Suite Community Edition
-- DVWA (Damn Vulnerable Web Application)
+| Tool | Purpose |
+|------|---------|
+| Python 3.12 | Tool development |
+| OWASP ZAP | DAST scanning |
+| Burp Suite Community | Manual web testing |
+| Semgrep | SAST / CI pipeline |
+| Splunk Enterprise | SIEM / log analysis |
+| DVWA | Web app target |
+| crAPI | API security target |
+| Docker | Lab environment |
+| GitHub Actions | CI/CD |
 
-### What I practiced
-- Setting up Burp Suite proxy using built-in browser
-- Intercepting HTTP requests mid-flight
-- Parameter tampering — modifying GET request credentials
-- Using HTTP History to review all intercepted traffic
-- Using Repeater to test multiple request variations
-
-### Key findings
-- DVWA Brute Force page sends credentials via GET request
-- Username and password visible in plain text in URL
-- No server-side validation — parameters can be modified mid-flight
-- Credentials leak in browser history, server logs, and proxy logs
-
-
-
-## OWASP Top 10 hands-on
-
-### Vulnerabilities practiced on DVWA
-
-### SQL Injection — OWASP A03
-- Injected malicious SQL into User ID field
-- Input: %' or '0'='0 returned all 5 user records
-- Fix: Parameterised queries — never concatenate user input into SQL
-
-### XSS Reflected — OWASP A03
-- Injected <script>alert('XSS')</script> into name field
-- Script executed in browser proving vulnerability
-- Fix: Output encoding — html.escape() converts < > to safe characters
-
-### XSS Stored — OWASP A03
-- Injected script into guestbook message field
-- Script saved in database — executes for every visitor
-- More dangerous than Reflected — permanent and affects all users
-- Fix: Sanitise input and encode output before storing
-
-### Command Injection — OWASP A03
-- Injected 127.0.0.1; whoami into ping field
-- Server executed both commands — revealed www-data username
-- Fix: Never concatenate user input into system commands
-- Use subprocess list format in Python
-
-### Key security principle
-All three vulnerabilities share the same root cause —
-untrusted user input passed directly into an interpreter.
-Fix: Never trust user input — always validate server side.
-Frontend validation provides zero security — 
-can be bypassed using Burp Suite.
+---
 
 ## Background
 - 14 years QA Automation Engineering
 - CISSP certified
 - CC (Certified in Cybersecurity)
-- Transitioning into Application Security
+- Actively transitioning into Application Security Engineering
 
 ## Connect
-https://www.linkedin.com/in/sandeepa-jaladi-b4250966/
+[LinkedIn — Sandeepa Jaladi](https://www.linkedin.com/in/sandeepa-jaladi-b4250966/)
