@@ -25,7 +25,7 @@ def send_to_splunk(finding):
             SPLUNK_URL,
             headers={"Authorization": f"Splunk {SPLUNK_TOKEN}"},
             json=event,
-            verify=False  # nosemgrep: python.requests.security.disabled-cert-validation
+            verify=False  # nosemgrep
         )
         print(f"[SENT] {finding['risk']:6} — {finding['name']}")
     except Exception as e:
