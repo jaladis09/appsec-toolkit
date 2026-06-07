@@ -1,6 +1,6 @@
 # AI-Powered QA Pipeline
 
-> Original concept and implementation by Sandeepa Jaladi
+> Built by Sandeepa Jaladi
 > QA Automation Engineer (14 years) | CISSP | CC
 > [LinkedIn](https://www.linkedin.com/in/sandeepa-jaladi-b4250966/)
 
