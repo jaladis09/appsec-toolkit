@@ -21,6 +21,7 @@ not tutorials, not copy-paste. Real tools, real targets, real findings.
 | `dvwa_security_report.md` | DAST report | 4 Medium, 5 Low findings from ZAP |
 | `crapi_security_report.md` | API security report | BOLA, BFLA, Broken Auth findings |
 | `dvwa-login-threat-model.json` | Threat model | STRIDE — 6 threats on DVWA login flow |
+| `ai-qa-project/` | AI Engineering | Claude API pipeline — AI-powered test case generation and comparison vs Jira/Rovo |
 
 ---
 
