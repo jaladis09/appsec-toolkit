@@ -1,21 +1,32 @@
-AI-Powered QA Pipeline
+# AI-Powered QA Pipeline
 
-Original concept and implementation by Sandeepa Jaladi
-QA Automation Engineer (14 years) | CISSP | CC
-LinkedIn
+> Original concept and implementation by Sandeepa Jaladi
+> QA Automation Engineer (14 years) | CISSP | CC
+> [LinkedIn](https://www.linkedin.com/in/sandeepa-jaladi-b4250966/)
 
+---
 
-The Problem
+## The Problem
+
 Two recurring pain points after 14 years in QA:
-1. Regression blind spot
+
+**1. Regression blind spot**
 When a developer changes code, QA has no visibility into which files and modules were actually touched. Regression testing becomes guesswork — you test what you think was affected, not what was actually affected.
-2. Wasted QA cycles
+
+**2. Wasted QA cycles**
 If a code change is completely irrelevant to the Acceptance Criteria in Jira, nobody catches it until QA runs tests, hits failures, raises bugs, and sends it back to dev. A full wasted cycle — every single sprint.
 
-The Solution — Left Shift at PR Level
+---
+
+## The Solution — Left Shift at PR Level
+
 Validate alignment between business intent and technical implementation at the PR stage — before a single QA hour is spent.
 
-How It Works
+---
+
+## How It Works
+
+```
 Step 1 — PR Raised in Azure DevOps
         ↓
 Pipeline fetches the diff — every file changed, every line modified
@@ -43,21 +54,41 @@ Step 5 — Report Before QA
         ↓
 Consolidated gap report surfaced before code reaches QA
 Teams fix misalignment at the source — zero wasted QA cycles
+```
 
-Current Status
-ComponentStatusClaude API connection✅ CompleteSecure environment setup✅ CompleteJira REST API integration🔄 In ProgressAzure DevOps REST API🔄 In ProgressTest case comparison engine⬜ UpcomingReport generation⬜ Upcoming
+---
 
-Jira and Azure DevOps integrations are being developed against business systems and maintained in a private repository.
+## Current Status
 
+| Component | Status |
+|-----------|--------|
+| Claude API connection | ✅ Complete |
+| Secure environment setup | ✅ Complete |
+| Jira REST API integration | 🔄 In Progress |
+| Azure DevOps REST API | 🔄 In Progress |
+| Test case comparison engine | ⬜ Upcoming |
+| Report generation | ⬜ Upcoming |
 
-Stack
-ToolPurposePython 3.12Pipeline developmentClaude APIAI test case generation and comparisonJira REST APIFetch Rovo test cases from ACAzure DevOps REST APIFetch PR diffs and impacted filespython-dotenvSecure API key management
+> Jira and Azure DevOps integrations are being developed against business systems and maintained in a private repository.
 
-Background
+---
 
-14 years QA Automation Engineering
-CISSP | CC — both self-study
-Masters in Information Systems, NJIT (4.0 GPA)
-Transitioning into AI Engineering
+## Stack
 
-LinkedIn — Sandeepa Jaladi
+| Tool | Purpose |
+|------|---------|
+| Python 3.12 | Pipeline development |
+| Claude API | AI test case generation and comparison |
+| Jira REST API | Fetch Rovo test cases from AC |
+| Azure DevOps REST API | Fetch PR diffs and impacted files |
+| python-dotenv | Secure API key management |
+
+---
+
+## Background
+- 14 years QA Automation Engineering
+- CISSP | CC — both self-study
+- Masters in Information Systems, NJIT (4.0 GPA)
+- Transitioning into AI Engineering
+
+[LinkedIn — Sandeepa Jaladi](https://www.linkedin.com/in/sandeepa-jaladi-b4250966/)
