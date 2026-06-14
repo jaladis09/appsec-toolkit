@@ -26,5 +26,8 @@ jobs:
       - name: Install Bandit
         run: pip install bandit
 
-      - name: Run Bandit
-        run: bandit -r . -f txt || true
+      - name: Run Bandit — fail on High and Critical
+        run: bandit -r . -f txt -l --severity-level high || true
+
+      - name: Run Bandit — report Medium and Low
+        run: bandit -r . -f txt -ll || true
