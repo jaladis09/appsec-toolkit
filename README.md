@@ -234,6 +234,49 @@ Pipeline defined in `.github/workflows/security.yml`.
 - Always validate server side
 - Pipeline should fail on Critical/High — not block on Medium/Low
 
+##  — JWT and OAuth Security
+
+### What I learned
+- JWT structure — Header, Payload, Signature
+- JWT is base64 encoded NOT encrypted
+- Access token vs Refresh token
+- JWT vulnerabilities — Algorithm None, weak secret, long expiry
+- OAuth flow and security vulnerabilities
+- State parameter prevents CSRF in OAuth
+
+### JWT Analysis — crAPI
+Decoded real JWT from crAPI using jwt.io
+
+**Algorithm:** RS256 — asymmetric — more secure than HS256
+
+**Payload:**
+- sub: sandeepa@test.com
+- role: user
+- iat: issued at
+- exp: expires after 7 days
+
+**Findings:**
+| # | Finding | Risk |
+|---|---|---|
+| 1 | JWT expires in 7 days — too long | Medium |
+| 2 | MFA not enforced — mfaRequired: false | High |
+| 3 | Role stored in payload | Low |
+
+### JWT Vulnerabilities
+| Attack | Description | Fix |
+|---|---|---|
+| Algorithm None | Server accepts unsigned tokens | Never accept alg:none |
+| Weak secret | HS256 with weak key — forgeable | Use strong 256-bit secret |
+| Long expiry | Stolen token works too long | Access token 15-60 mins |
+| Sensitive data | Payload visible to anyone | Never store sensitive data in JWT |
+| Algorithm confusion | RS256 to HS256 downgrade | Lock algorithm server side |
+
+### OAuth Security
+- Never expose tokens in URLs — leak to logs and history
+- Always include state parameter — prevents CSRF
+- Minimum scope — request only permissions needed
+- Authorization code must be single use and short lived
+
 ## Background
 - 14 years QA Automation Engineering
 - CISSP certified
