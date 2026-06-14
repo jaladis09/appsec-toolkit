@@ -205,7 +205,34 @@ Pipeline defined in `.github/workflows/security.yml`.
 | Docker | Lab environment |
 | GitHub Actions | CI/CD |
 
----
+---## Secure Code Review
+
+### Tools used
+- Bandit 1.9.4 — Python security scanner
+- Manual code review
+
+### What I practiced
+- Manual secure code review — finding vulnerabilities by reading code
+- Running Bandit against Python code
+- Added Bandit to CI/CD pipeline alongside Semgrep
+- Severity based pipeline — fail on High/Critical, report Medium/Low
+
+### Vulnerabilities found in vulnerable_code.py
+| # | Vulnerability | Severity | CWE | Fix |
+|---|---|---|---|---|
+| 1 | Hardcoded credentials | Critical | CWE-259 | Environment variables |
+| 2 | SQL Injection — login() | Critical | CWE-89 | Parameterised queries |
+| 3 | SQL Injection — get_user_data() | Critical | CWE-89 | Parameterised queries |
+| 4 | Weak MD5 hashing | High | CWE-327 | bcrypt or Argon2 |
+| 5 | Command Injection — os.system() | High | CWE-78 | subprocess shell=False |
+
+### Key lessons
+- Manual review finds logic flaws tools miss
+- Tools find known patterns automatically
+- Manual + automated together = best coverage
+- Frontend validation provides zero security
+- Always validate server side
+- Pipeline should fail on Critical/High — not block on Medium/Low
 
 ## Background
 - 14 years QA Automation Engineering
